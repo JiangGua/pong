@@ -107,3 +107,8 @@ SITE_TITLE		# 站点标题栏(标签页上面那个, 默认为 'Stats - Pong')
 SITE_H1			# 站点一级标题(如果不设置此项，则自动使用 SITE_TITLE)
 ```
 
+
+
+## 参考资料
+
+- [Hyperlink Auditing - HTML 规范](https://html.spec.whatwg.org/multipage/links.html#hyperlink-auditing)
