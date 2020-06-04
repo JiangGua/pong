@@ -5,11 +5,17 @@ from flask import Flask, request, render_template
 from db import db_links
 
 app = Flask(__name__)
+allow_ping_from_keyword = os.environ.get('ALLOW_PING_FROM_KEYWORD', default=None)
 
 @app.route('/ping/', methods=['POST'])
 def ping():
     if request.method == 'POST':
         ping_from = request.headers.get('Ping-From')
+        
+        # 阻止其它网站盗用本服务
+        if allow_ping_from_keyword and (allow_ping_from_keyword.find(ping_from) == -1):
+            return "Unknown Origin: {}".format(ping_from)
+
         ping_to = request.headers.get('Ping-To')
         if item := db_links.find_one({'link': ping_to}):
             item['count'] += 1
