@@ -1,4 +1,4 @@
-# pong
+# Pong
 
 处理 Hyperlink Auditing 请求并记录来源网页、目标网页和点击次数。
 
@@ -75,7 +75,7 @@ GET https://example.pong/api/stats
 
 ## 部署
 
-按照常规的 Flask 应用部署流程即可，如使用 Heroku，则只需小改 GitHub Actions 配置文件即可完成部署。
+按照常规的 Flask 应用部署流程即可。如希望部署到 Heroku，可参考 [用 GitHub Actions 把项目部署到 Heroku - Jonbgua](https://jonbgua.com/heroku-github-action.html)。
 
 
 
@@ -88,8 +88,6 @@ GET https://example.pong/api/stats
 来源地址关键字白名单。默认为None，即不管来源网站是啥都予以记录；一旦 `ALLOW_PING_FROM_KEYWORD` 值不为空，则启用白名单，不包含关键字的 Origin 不予理会，以防其它网站盗用本服务。
 
 注：因为只有关键字匹配这一个识别机制，所以并不能非常精准地只服务于某个网站，只是一定程度上提升了盗用服务的成本。
-
-
 
 
 
@@ -109,8 +107,3 @@ SITE_TITLE		# 站点标题栏(标签页上面那个, 默认为 'Stats - Pong')
 SITE_H1			# 站点一级标题(如果不设置此项，则自动使用 SITE_TITLE)
 ```
 
-
-
-
-
-#### 
