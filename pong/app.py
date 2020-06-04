@@ -11,6 +11,9 @@ allow_ping_from_keyword = os.environ.get('ALLOW_PING_FROM_KEYWORD', default=None
 def ping():
     if request.method == 'POST':
         ping_from = request.headers.get('Ping-From')
+        # 有的时候 Ping-From 为空，则取 Origin
+        if not ping_from:
+            ping_from = request.headers.get('Origin')
 
         # 阻止其它网站盗用本服务
         if allow_ping_from_keyword and (ping_from.find(allow_ping_from_keyword) == -1):

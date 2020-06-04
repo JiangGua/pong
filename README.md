@@ -18,7 +18,7 @@
 
 试一下：
 
-<a href="https://github.com/JiangGua/pong" ping="https://pong-demo.herokuapp.com/ping">JiangGua/Pong 项目主页</a>
+<a href="https://jianggua.github.io/pong-demo/index.html">链接测试 - Pong</a>
 
 
 
