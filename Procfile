@@ -1,1 +1,1 @@
-web: gunicorn app:app --log-file -
+web: gunicorn --pythonpath pong app:app --log-file -

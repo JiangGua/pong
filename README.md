@@ -13,7 +13,7 @@
 在来源页添加链接：
 
 ```html
-<a href="https://dest.com" ping="https://example.pong/ping">链接文字</a>
+<a href="https://dest.com" ping="https://example.pong/ping" target="_blank">链接文字</a>
 ```
 
 试一下：
