@@ -10,8 +10,9 @@
   <table border="1">
     <thead>
       <tr>
-        <th>目标网址</th>
+        <th>目标地址</th>
         <th>点击次数</th>
+        <th>来源地址</th>
       </tr>
     </thead>
     <tbody>
@@ -19,6 +20,7 @@
       <tr>
         <td>{{ link.link }}</td>
         <td>{{ link.count }}</td>
+        <td>{{ link.origin }}</td>
       </tr>
       {% endfor %}
     </tbody>
