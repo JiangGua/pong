@@ -1,4 +1,7 @@
-from flask import Flask, request
+import os
+import pymongo
+from flask import Flask, request, render_template
+
 from db import db_links
 
 app = Flask(__name__)
@@ -19,8 +22,17 @@ def ping():
             db_links.insert_one(item)
 
         return ping_to
+    else:
+        return "Use POST method instead"
         
-
+@app.route('/stats')
+def stats():
+    links = list(db_links.find({}, sort=[("count", pymongo.DESCENDING)]))
+    config = {
+        'title': os.environ.get('SITE_TITLE', default='Stats - Pong'),
+        'h1': os.environ.get('SITE_TITLE', default=None) or os.environ.get('SITE_TITLE', default='Stats - Pong')
+    }
+    return render_template('stats.html', config=config, links=links)
 
 if __name__ == "__main__":
     app.run(host = "0.0.0.0", port = 5000)
