@@ -5,34 +5,46 @@ from flask import Flask, request, render_template
 from db import db_link
 
 app = Flask(__name__)
-allow_ping_from_keyword = os.environ.get('ALLOW_PING_FROM_KEYWORD', default=None)
+allow_ping_from_keyword = os.environ.get('ALLOW_PING_FROM_KEYWORD', default='')
+allow_ping_from_keyword_list = allow_ping_from_keyword.split(',')
+disallow_ping_to_keyword = os.environ.get('DISALLOW_PING_TO_KEYWORD', default='')
+disallow_ping_to_keyword_list = disallow_ping_to_keyword.split(',')
 
 @app.route('/ping/', methods=['POST'])
 def ping():
-    if request.method == 'POST':
-        ping_from = request.headers.get('Ping-From')
-        # 有的时候 Ping-From 为空，则取 Origin
-        if not ping_from:
-            ping_from = request.headers.get('Origin')
+    def match(s, keyword_list):
+        if (not s) or (not keyword_list):
+            return False
+        for k in keyword_list:
+            if k in s:
+                return True
+        return False
 
-        # 阻止其它网站盗用本服务
-        if allow_ping_from_keyword and (ping_from.find(allow_ping_from_keyword) == -1):
-            return "Unknown Origin: {}".format(ping_from)
+    ping_from = request.headers.get('Ping-From')
+    # 有的时候 Ping-From 为空，则取 Origin
+    if not ping_from:
+        ping_from = request.headers.get('Origin')
 
-        ping_to = request.headers.get('Ping-To')
-        if item := db_link.find_one({'link': ping_to, 'origin': ping_from}):
-            item['count'] += 1
-            db_link.update_one({'link': ping_to, 'origin': ping_from}, {'$set': item})
-        else:
-            item = {
-                'link': ping_to,
-                'count': 1,
-                'origin': ping_from
-            }
-            db_link.insert_one(item)
-        return ping_to
+    # 阻止其它网站盗用本服务
+    if allow_ping_from_keyword and (not match(ping_from, allow_ping_from_keyword_list)):
+        return "Unknown Origin: {}".format(ping_from)
+
+    ping_to = request.headers.get('Ping-To')
+    # 目的网址关键字黑名单, 防止小广告
+    if disallow_ping_to_keyword and (match(ping_to, disallow_ping_to_keyword_list)):
+        return "Blacklisted Destination: {}".format(ping_to)
+    # 数据记录
+    if item := db_link.find_one({'link': ping_to, 'origin': ping_from}):
+        item['count'] += 1
+        db_link.update_one({'link': ping_to, 'origin': ping_from}, {'$set': item})
     else:
-        return "Use POST method instead"
+        item = {
+            'link': ping_to,
+            'count': 1,
+            'origin': ping_from
+        }
+        db_link.insert_one(item)
+    return ping_to
         
 @app.route('/stats/')
 def stats():
