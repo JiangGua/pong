@@ -95,7 +95,7 @@ GET https://example.pong/api/stats
 
 ```python
 MONGO_URI		# MongoDB 地址(形如 mongodb://xxxxx 的一串 URI)
-DATABASE_NAME	# 数据库名称(默认为: "pong")
+DATABASE_NAME	        # 数据库名称(默认为: "pong")
 ```
 
 
